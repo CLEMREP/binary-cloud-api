@@ -18,4 +18,4 @@ jobs:
           git pull origin main
           git status
           composer install --no-interaction
-          docker exec -it php-fpm_api.binary-cloud.fr sh -c "cd binary-cloud-api && php artisan migrate:fresh --seed --force"
+          docker exec -i php-fpm_api.binary-cloud.fr sh -c "cd binary-cloud-api && php artisan migrate:fresh --seed --force"
