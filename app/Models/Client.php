@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * @property string $email
@@ -19,15 +15,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $password
  * @property datetime $email_verified_at
  * @property string $remember_token
- * @property bool $admin
- * @property Address $address
- * @property Company $company
- * @property int $address_id
+ * @property bool $isCompany
  * @property int $company_id
+ * @property int $address_id
  */
-class User extends Authenticatable implements JWTSubject
+class Client extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -37,16 +31,18 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'firstname',
         'lastname',
-        'email',
         'phone',
+        'email',
         'password',
         'admin',
+        'isCompany',
         'company_id',
         'address_id',
+        'user_id',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
@@ -56,51 +52,43 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * The attributes that should be cast.
+     * The attributes that are mass assignable.
      *
      * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'admin' => 'boolean',
-        'address_id' => 'integer',
-        'company_id' => 'integer',
     ];
 
+    /**
+     * Get the owner of the customer.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    public function address() : BelongsTo
+    /**
+     * Get the address record associated with the customer.
+     */
+    public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class);
     }
 
-    public function invoice() : HasMany
-    {
-        return $this->hasMany(Invoice::class);
-    }
-
     /**
-     * Get the company of the user
+     * Get the company record associated with the customer.
      */
-    public function company() : BelongsTo
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
     /**
-     * Get the clients of the user
+     * Method to know if the customer is a professional
      */
-    public function clients() : HasMany
+    public function isProfessional(): bool
     {
-        return $this->hasMany(Client::class);
-    }
-
-    public function getJWTIdentifier(): mixed
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims(): array
-    {
-        return [];
+        return $this->isCompany;
     }
 }

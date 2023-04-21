@@ -6,13 +6,14 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('account')->middleware('api')->group(function () {
     Route::get('my-account', function (Request $request) {
         return response()->json([
-            'user' => $request->user(),
+            'user' => UserResource::make($request->user()->load(['address', 'company', 'company.address'])),
         ]);
     });
 
