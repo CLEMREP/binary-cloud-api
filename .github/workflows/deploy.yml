@@ -16,6 +16,5 @@ jobs:
         script: |
           cd /docker/api.binary-cloud.fr/html/binary-cloud-api
           git pull origin main
-          git status
-          composer install --no-interaction
-          docker exec -i php-fpm_api.binary-cloud.fr sh -c "cd binary-cloud-api && php artisan migrate:fresh --seed --force"
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          docker exec -i php-fpm_api.binary-cloud.fr sh -c "cd binary-cloud-api && php artisan migrate:fresh --seed --force && php artisan optimize:clear"
