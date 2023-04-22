@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('siret');
+            $table->foreignId('image_id')->nullable()->constrained();
             $table->unsignedBigInteger('address_id');
 
             $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');

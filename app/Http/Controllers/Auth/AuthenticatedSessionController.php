@@ -25,7 +25,7 @@ class AuthenticatedSessionController extends Controller
         /** @var User $authenticateUser */
         $authenticateUser = User::where('email', $request->email)
             ->first()
-            ->load(['company', 'company.address', 'address']);
+            ->load(['company', 'company.address', 'company.image', 'address']);
 
         return response()->json([
             'accessToken' => \auth()->attempt($request->only('email', 'password')),

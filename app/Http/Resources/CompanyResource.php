@@ -24,6 +24,7 @@ class CompanyResource extends JsonResource
             'phone' => $this->resource->phone,
             'siret' => $this->resource->siret,
             'address' => AddressResource::make($this->whenLoaded('address')),
+            'image' => ImageResource::make($this->whenLoaded('image')),
         ];
     }
 }
