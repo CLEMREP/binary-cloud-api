@@ -14,6 +14,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
+          chmod 777 /docker/api.binary-cloud.fr/html/binary-cloud-api
           cd /docker/api.binary-cloud.fr/html/binary-cloud-api
           git pull origin main
           composer install --no-interaction --prefer-dist --optimize-autoloader
