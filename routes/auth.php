@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('account')->middleware('api')->group(function () {
     Route::get('my-account', function (Request $request) {
+        if (!$request->user()) {
+            return response()->json([
+                'user' => null,
+            ]);
+        }
+
         return response()->json([
             'user' => UserResource::make($request->user()->load(['address', 'company', 'company.address', 'company.image'])),
         ]);
